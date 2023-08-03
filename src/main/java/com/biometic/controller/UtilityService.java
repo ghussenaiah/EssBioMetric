@@ -37,6 +37,7 @@ import com.biometic.serviceimpl.Biometric_AttdImpl;
 import com.biometic.serviceimpl.EmployeeAndBioMetricMappingImpl;
 import com.biometic.serviceimpl.EventsErrorsImpl;
 import com.biometic.serviceimpl.ServerDetailsImpl;
+import com.biometic.utility.Utility;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -61,6 +62,10 @@ public class UtilityService {
 
 	@Autowired
 	EmployeeAndBioMetricMappingImpl empAndBioImpl;
+	
+	
+	@Autowired
+	Utility utility;
 	
 	
 	
@@ -99,9 +104,9 @@ public class UtilityService {
 			serverName=server.getServername();
 		
 
-		rootElement=ExecuteRequest("geteventcount",0,null,serverIp);
+		rootElement=ExecuteRequest(Utility.GETEVENTCOUNT,0,null,serverIp);
 		
-		String totalEvents = rootElement.getElementsByTagName("Seq-Number").item(0).getTextContent();
+		String totalEvents = rootElement.getElementsByTagName(Utility.SEQ_NUMBER).item(0).getTextContent();
 		
 		int totEvents = Integer.parseInt(totalEvents); 
 		
@@ -109,7 +114,7 @@ public class UtilityService {
 		
 		for (int starteventno = lasteventno; starteventno <= totEvents; starteventno = starteventno + 100) {
 
-			rootElement = ExecuteRequest("getevents", starteventno,null,serverIp);
+			rootElement = ExecuteRequest(Utility.GET_EVENTS, starteventno,null,serverIp);
 			
 			 for (int j = 0; j <= 99; j++) {
 				
@@ -142,7 +147,7 @@ public class UtilityService {
 				ba.setAttendancedate(dateValue);
 				ba.setCreateddate(new Date());
 				ba.setEmpno(userId);
-				ba.setInorout(entryorexit);
+				ba.setInorout(String.valueOf(server.getId()));
 				ba.setOrgname(serverName);
 				ba.setSequenceno(seqNo);
 				ba.setStatus("Post");
@@ -153,7 +158,7 @@ public class UtilityService {
 				System.out.println(ba.getId());
 				
 				}catch(Exception e) {
-					System.out.println("Got Exception"+e.getMessage());
+				//	System.out.println("Got Exception"+e.getMessage());
 					// updating last se
 					 server.setLastsequence(lastpostedsequenceno);
 					 saveError("server ip "+serverIp+"----> sequence no"+seqNo+"----->"+e.getMessage()+"");

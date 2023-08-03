@@ -23,9 +23,9 @@ import org.xml.sax.SAXException;
 
 import com.biometic.model.EmployeeAndBioMetricRefNo;
 import com.biometic.model.Server_Details;
-import com.biometic.model.Users;
 import com.biometic.serviceimpl.EmployeeAndBioMetricMappingImpl;
 import com.biometic.serviceimpl.ServerDetailsImpl;
+import com.biometic.utility.Utility;
 
 import okhttp3.Request;
 
@@ -47,6 +47,8 @@ public class ServiceController {
 	
 	@Autowired
 	UtilityService utilityService;
+	
+
 	
 	@RequestMapping("/getHello")
 	public String getHello() {
@@ -85,7 +87,6 @@ public class ServiceController {
 		eb.setOrgname(orgName);
 		String empbiono=utilityService.getUserDetails(employeeNo);
 		eb.setBiorefno(empbiono);
-		long id=(long) 3445;
 		//eb.setId(id);
 		if(empbiono!=null) {
 			eb=empAndBioImpl.save(eb);
@@ -103,11 +104,7 @@ public class ServiceController {
 	}
 	
 	
-	@PostMapping("/register")
-	public void newServer(@RequestBody Users requestDto) {
-		
-		System.out.println(requestDto);
-	}
+
 }
 
 
